@@ -86,19 +86,38 @@ RSpec.describe "Api::V1::Auth::Registrations", type: :request do
     end
   end
 
-###### sign_inのテスト ######
   describe "GET/registrations" do
-    subject { get(api_v1_auth_validate_token_path, params: params) }
-    fcontext "リクエストが通っている場合" do
-      let(:params) { attributes_for(:user) }
+    ############### どうしてもrequest.headerに値を入れたい/入れないとrequest.body(name,email,password)の入力までに至らない ################3
+    subject { get(api_v1_auth_validate_token_path, params: params, headers: headers) }
 
-      it "ユーザーが登録される" do
-        subject
+    fcontext "request.headerに5つの適切な情報が入っていれば" do
+      # let(:params) { attributes_for(:user) }
+      let(:current_user) { create(:user) }
+      let(:params) { { name: current_user.name, email: current_user.email, password: current_user.password } }
+      let(:headers) { current_user.create_new_auth_token }
+      it "request.bodyの認証に進む" do
         binding.pry
-        res = JSON.response.body
-        expect { subject }.to change { User.count }.by(1)
+        subject
+        res = JSON.parse(response.body)
+        binding.pry
+        expect(response.headers["uid"]).to be_present
+        expect(response.headers["access-token"]).to be_present
+        expect(response.headers["client"]).to be_present
+        expect(response.headers["expiry"]).to be_present
+        # binding.pry
         expect(response).to have_http_status(:ok)
       end
+    end
+######## ↑通りました 次は↓のcodeからです！ #############
+    context "request.bodyに適切な情報が入っていれば" do
+      let(:params) { attributes_for(:user) }
+      # it "ログインできる" do
+      #   subject
+
+      #   res = JSON.response.body
+      #   expect(subject).to change { User.count }.by(1)
+      #   expect(response).to have_http_status(:ok)
+      # end
     end
   end
 end
