@@ -85,5 +85,4 @@ RSpec.describe "Api::V1::Auth::Registrations", type: :request do
       end
     end
   end
-
 end

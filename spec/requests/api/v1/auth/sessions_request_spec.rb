@@ -1,18 +1,17 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "Sessions", type: :request do
-  fdescribe "Userのログイン POST/sign_in" do
+  describe "Userのログイン POST/sign_in" do
     subject { post(api_v1_user_session_path, params: params, headers: headers) }
 
     ########## 正常系 ###########
     context "request.bodyに適切なパラメーターが入っている場合" do
       let(:current_user) { create(:user) }
-      let(:params) { { name: current_user.name , email: current_user.email, password: current_user.password } }
+      let(:params) { { name: current_user.name, email: current_user.email, password: current_user.password } }
 
       it "ログインできる" do
         subject
-        # binding.pry
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(:ok)
         expect(response.headers["access-token"]).not_to be_nil
         expect(response.headers["token-type"]).not_to be_nil
         expect(response.headers["client"]).not_to be_nil
@@ -28,8 +27,7 @@ RSpec.describe "Sessions", type: :request do
       let(:params) { { email: "", password: current_user.password } }
       it "ログインできない" do
         subject
-        # binding.pry
-        expect(response).to have_http_status(401)
+        expect(response).to have_http_status(:unauthorized)
         expect(response.headers["access-token"]).to be_nil
         expect(response.headers["token-type"]).to be_nil
         expect(response.headers["client"]).to be_nil
@@ -40,11 +38,10 @@ RSpec.describe "Sessions", type: :request do
 
     context "request.bodyのパラメーター(password)が不適切な場合" do
       let(:current_user) { create(:user) }
-      let(:params) { { email: current_user.email, password: ""} }
+      let(:params) { { email: current_user.email, password: "" } }
       it "ログインできない" do
         subject
-        # binding.pry
-        expect(response).to have_http_status(401)
+        expect(response).to have_http_status(:unauthorized)
         expect(response.headers["access-token"]).to be_nil
         expect(response.headers["token-type"]).to be_nil
         expect(response.headers["client"]).to be_nil
@@ -52,8 +49,6 @@ RSpec.describe "Sessions", type: :request do
         expect(response.headers["uid"]).to be_nil
       end
     end
-
-
 
     ############ 正常系 ############
     ############ ここは後でするべきところ ##############
@@ -149,6 +144,5 @@ RSpec.describe "Sessions", type: :request do
     #   #   # expect(response).to have_http_status(:401)
     #   # end
     # end
-
   end
 end
