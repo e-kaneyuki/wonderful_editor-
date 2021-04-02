@@ -47,7 +47,7 @@ RSpec/InstanceVariable:
 # パフォーマンスの問題さえ無ければ 1 example 1 assertion にしておく方が
 # 読みやすいテストになりやすいので、そこはレビューで担保していく必要がある。
 RSpec/MultipleExpectations:
-  Max: 5
+  Max: 10
   # AggregateFailuresByDefault: true
   # model specで2重テストをしている。便宜上必要なので最大4つまで指定できる様にした
 
