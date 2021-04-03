@@ -59,9 +59,9 @@ RSpec.describe "Sessions", type: :request do
       it "ログアウトできる" do
         # binding.pry
         subject
-        # binding.pry
+        binding.pry
         expect(response).to have_http_status(200)
-        # expect(response.headers["access-token"]).not_to be_nil
+        expect(response.headers).not_to include(:headers)
       end
     end
   end
