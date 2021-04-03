@@ -51,34 +51,36 @@ RSpec.describe "Sessions", type: :request do
     end
   end
 
-   fdescribe "Userのログアウト DELETE/sign_out" do
+  describe "Userのログアウト DELETE/sign_out" do
     subject { delete(destroy_api_v1_user_session_path, headers: headers) }
-    fcontext "適切なrequest.headersが送信できている" do
+
+    context "適切なrequest.headersが送信できている" do
       let(:current_user) { create(:user) }
       let(:headers) { current_user.create_new_auth_token }
       it "ログアウトできる" do
         # binding.pry
         subject
         # binding.pry
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(:ok)
         expect(response.headers).not_to include(:headers)
       end
     end
+
     context "不適切なrequest.headerが送信された場合" do
       let(:current_user) { create(:user) }
       let(:headers) do
         {
-          "access-token"=>"",
-          "token-type"=>"",
-          "client"=>"",
-          "expiry"=>"",
-          "uid"=>""
+          "access-token" => "",
+          "token-type" => "",
+          "client" => "",
+          "expiry" => "",
+          "uid" => "",
         }
       end
       it "ログアウトできない" do
         subject
         res = JSON.parse(response.body)
-        expect(response).to have_http_status(404)
+        expect(response).to have_http_status(:not_found)
         expect(res["errors"]).to include("User was not found or was not logged in.")
       end
     end
