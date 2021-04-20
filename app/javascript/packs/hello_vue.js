@@ -14,6 +14,7 @@ import App from "../app.vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import "vuetify/dist/vuetify.min.css";
+import "highlight.js/styles/monokai.css";
 import Vuetify from "vuetify";
 Vue.use(Vuex);
 Vue.use(VueRouter);
