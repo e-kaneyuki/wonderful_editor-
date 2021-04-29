@@ -24,9 +24,18 @@ module Api::V1
       # 記事が新しい順に並び替えないといけない
     end
 
+    # 4/26 showのif-elsif-else分を弄った
     def show
-      @articles = Article.find(params[:id])
-      render json: @articles, each_serializer: ArticleSerializer
+      if (@articles.draft? && @articles.user.id != current_user.id)
+        flash[:alert] = "権限がありません"
+        redirect_to root_path
+      elsif (@articles.published? || user_signed_in? && @articles.draft?)
+        @articles = Article.find(params[:id])
+        render json: @articles, each_serializer: ArticleSerializer
+      else
+        flash[:alert] = "非公開です ログインしてください"
+        redirect_to root_path
+      end
     end
 
     def create
@@ -44,6 +53,11 @@ module Api::V1
     def destroy
       @article = Article.find(params[:id])
       @article.delete
+    end
+
+    def toggle_status
+      @salon.toggle_status!
+      redirect_to dashboard_path, notice: 'ステータスを変更しました'
     end
 
     private
