@@ -25,7 +25,6 @@ class Article < ApplicationRecord
   enum status: { draft: false, published: true }
 
   validates :title, presence: true # 追加
-  validates :status, inclusion: { in: Article.statuses.keys }
 
   def toggle_status!
     draft? ? published! : draft!
