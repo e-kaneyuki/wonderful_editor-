@@ -26,10 +26,10 @@ module Api::V1
 
     # 4/26 showのif-elsif-else分を弄った
     def show
-      if (@articles.draft? && @articles.user.id != current_user.id)
+      if @articles.draft? && @articles.user.id != current_user.id
         flash[:alert] = "権限がありません"
         redirect_to root_path
-      elsif (@articles.published? || user_signed_in? && @articles.draft?)
+      elsif @articles.published? || user_signed_in? && @articles.draft?
         @articles = Article.find(params[:id])
         render json: @articles, each_serializer: ArticleSerializer
       else
@@ -57,7 +57,7 @@ module Api::V1
 
     def toggle_status
       @salon.toggle_status!
-      redirect_to dashboard_path, notice: 'ステータスを変更しました'
+      redirect_to dashboard_path, notice: "ステータスを変更しました"
     end
 
     private

@@ -18,5 +18,4 @@ Rails.application.routes.draw do
   resources :article do
     patch :toggle_status
   end
-
 end
