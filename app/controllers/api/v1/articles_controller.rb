@@ -26,44 +26,30 @@ module Api::V1
 
     # 4/26 showのif-elsif-else分を弄った
     def show
-      if @articles.draft? && @articles.user.id != current_user.id
-        flash[:alert] = "権限がありません"
-        redirect_to root_path
-      elsif @articles.published? || user_signed_in? && @articles.draft?
-        @articles = Article.find(params[:id])
-        render json: @articles, each_serializer: ArticleSerializer
-      else
-        flash[:alert] = "非公開です ログインしてください"
-        redirect_to root_path
-      end
+      # binding.pry
+      article = Article.published.find(params[:id])
+      render json: article
     end
 
     def create
-      @article = current_user.articles.create!(article_params)
-      render json: @article, each_serializer: ArticleSerializer
+      article = current_user.articles.create!(article_params)
+      render json: article
     end
 
     def update
-      @article = Article.find(params[:id])
-      @article.update!(article_params)
-
-      render json: @article, each_serializer: ArticleSerializer
+      article = current_user.articles.find(params[:id])
+      article.update!(article_params)
+      render json: article
     end
 
     def destroy
-      @article = Article.find(params[:id])
-      @article.delete
+      article = current_user.articles.find(params[:id])
+      article.destroy!
     end
-
-    def toggle_status
-      @salon.toggle_status!
-      redirect_to dashboard_path, notice: "ステータスを変更しました"
-    end
-
     private
 
       def article_params
-        params.require(:article).permit(:title, :body)
+        params.require(:article).permit(:title, :body, :status)
       end
   end
 end

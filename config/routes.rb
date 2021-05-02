@@ -13,6 +13,7 @@ Rails.application.routes.draw do
         registrations: "api/v1/auth/registrations",
       }
       resources :articles
+      # resources :
     end
   end
   resources :article do

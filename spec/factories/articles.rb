@@ -4,7 +4,7 @@
 #
 #  id         :bigint           not null, primary key
 #  body       :text
-#  status     :integer          default(NULL), not null
+#  status     :integer          default("draft"), not null
 #  title      :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -24,5 +24,12 @@ FactoryBot.define do
     sequence(:body) {|n| "#{n}_#{Faker::Lorem.sentence}" }
     sequence(:updated_at) {|n| "#{n}_#{Faker::Time.between(from: DateTime.now - 1, to: DateTime.now, format: :long)}" }
     user
+
+    trait :draft do
+      status { :draft }
+    end
+    trait :published do
+      status { :published }
+    end
   end
 end
