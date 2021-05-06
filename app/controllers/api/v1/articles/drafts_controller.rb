@@ -1,4 +1,5 @@
-class Api::V1::Articles::DraftsController < ApplicationController
+class Api::V1::Articles::DraftsController < BaseApiController
+  # ApplicationController ⇨ BaseApiController
   def index
   end
 
