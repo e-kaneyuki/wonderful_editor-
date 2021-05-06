@@ -129,7 +129,7 @@ export default {
 
     async fetchArticle(id) {
       await axios
-        .get(`/api/v1/articles/${id}`)
+        .get(`/api/v1/articles/drafts/${id}`, headers)
         .then(response => {
           this.id = response.data.id;
           this.title = response.data.title;

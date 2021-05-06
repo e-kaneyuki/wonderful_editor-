@@ -10,7 +10,21 @@
       <router-link to="/articles/new" class="header-link">
         <v-btn text class="post font-weight-bold">投稿する</v-btn>
       </router-link>
-      <v-btn text @click="logout" class="white--text font-weight-bold">ログアウト</v-btn>
+      <v-menu bottom left min-width="120">
+        <template v-slot:activator="{ on }">
+          <v-btn dark icon v-on="on">
+            <v-icon>fas fa-ellipsis-v</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item link v-for="(menu, i) in menus" :key="i" @click="undefined">
+            <v-list-item-content>
+              <v-list-item-title @click="menu.click">{{ menu.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </template>
     <template v-else>
       <router-link to="/sign_up" class="header-link">
@@ -40,9 +54,31 @@ const headers = {
 };
 
 export default {
-    data() {
+  data() {
     return {
-      isLoggedIn: !!localStorage.getItem("access-token")
+      isLoggedIn: !!localStorage.getItem("access-token"),
+
+      menus: [
+        {
+          title: "マイページ",
+          click: () => {
+            this.moveToMyPage();
+          }
+        },
+        {
+          title: "下書き一覧",
+          click: () => {
+            this.moveToDrafts();
+          }
+        },
+        {
+          title: "ログアウト",
+          click: () => {
+            this.logout();
+          }
+        }
+      ]
+
     }
   },
 
@@ -67,6 +103,14 @@ export default {
       Router.push("/");
       // TODO: Vuex でログイン状態を管理するようになったら消す
       window.location.reload();
+    },
+
+    moveToMyPage() {
+      Router.push("/mypage");
+    },
+
+    moveToDrafts() {
+      Router.push("/articles/drafts");
     }
   }
 }

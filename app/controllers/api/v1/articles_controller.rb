@@ -4,7 +4,7 @@ module Api::V1
     before_action :authenticate_user!, only: [:create, :update, :destroy]
 
     def index
-      @articles = Article.order("updated_at")
+      @articles = Article.published.order("updated_at")
       render json: @articles, each_serializer: ArticlePreviewSerializer
       # binding.pry
       # 記事全てを表示する
@@ -27,7 +27,7 @@ module Api::V1
     # 4/26 showのif-elsif-else分を弄った
     def show
       # binding.pry
-      article = Article.find(params[:id])
+      article = Article.published.find(params[:id])
       render json: article
     end
 
