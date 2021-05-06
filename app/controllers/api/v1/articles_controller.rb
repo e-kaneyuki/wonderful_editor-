@@ -46,6 +46,7 @@ module Api::V1
       article = current_user.articles.find(params[:id])
       article.destroy!
     end
+
     private
 
       def article_params
