@@ -27,7 +27,7 @@ module Api::V1
     # 4/26 showのif-elsif-else分を弄った
     def show
       # binding.pry
-      article = Article.published.find(params[:id])
+      article = Article.find(params[:id])
       render json: article
     end
 
